@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class LandingContent extends Base
 {
-    use \Dimsav\Translatable\Translatable;
+    use \Astrotomic\Translatable\Translatable;
 
     public $table = 'landing_content';
 

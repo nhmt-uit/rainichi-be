@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Alphabet extends Model
 {
-    use \Dimsav\Translatable\Translatable;
+    use \Astrotomic\Translatable\Translatable;
 
     const HIRAGANA = 1;
     const KATAKANA = 2;

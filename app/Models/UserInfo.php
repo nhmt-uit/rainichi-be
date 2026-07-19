@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class UserInfo extends Base
 {
-    use \Dimsav\Translatable\Translatable;
+    use \Astrotomic\Translatable\Translatable;
 
     protected $table = 'user_info';
     protected $fillable = ['user_id', 'country_id', 'facebook', 'google_plus', 'twitter', 'instagram'];

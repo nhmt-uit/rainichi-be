@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Kanji extends Model
 {
-    use \Dimsav\Translatable\Translatable;
+    use \Astrotomic\Translatable\Translatable;
 
     public $table = 'kanji';
 

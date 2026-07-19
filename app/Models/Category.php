@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Category extends Base
 {
-    use \Dimsav\Translatable\Translatable;
+    use \Astrotomic\Translatable\Translatable;
 
     protected $table = 'category';
 

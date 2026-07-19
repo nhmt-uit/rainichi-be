@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CoursePriceType extends Model
 {
-    use \Dimsav\Translatable\Translatable;
+    use \Astrotomic\Translatable\Translatable;
 
     protected $table = 'course_price_type';
 

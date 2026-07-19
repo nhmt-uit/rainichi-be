@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Grammar extends Model
 {
-    use \Dimsav\Translatable\Translatable;
+    use \Astrotomic\Translatable\Translatable;
 
     public $timestamps = true;
 

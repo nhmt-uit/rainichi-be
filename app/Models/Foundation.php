@@ -9,7 +9,7 @@ class Foundation extends Model
     const TRUONG_AM = 1;
     const AM_NGAT = 2;
 
-    use \Dimsav\Translatable\Translatable;
+    use \Astrotomic\Translatable\Translatable;
 
     public $timestamps = true;
 

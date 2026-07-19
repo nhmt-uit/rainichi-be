@@ -8,7 +8,7 @@ class RewardRule extends Model
 {
     public $table = 'reward_rules';
 
-    use \Dimsav\Translatable\Translatable;
+    use \Astrotomic\Translatable\Translatable;
 
     public $timestamps = true;
 

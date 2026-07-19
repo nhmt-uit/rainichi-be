@@ -14,7 +14,7 @@ class Question extends Model
 
     public $timestamps = true;
 
-    use \Dimsav\Translatable\Translatable;
+    use \Astrotomic\Translatable\Translatable;
 
     public $translatedAttributes = ['name', 'description'];
 

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Vocabulary extends Model
 {
-    use \Dimsav\Translatable\Translatable;
+    use \Astrotomic\Translatable\Translatable;
     protected $table = 'vocabulary';
     public $translatedAttributes = ['chinese_vietnamese_word', 'meaning', 'example1', 'example2', 'audio_example_1', 'audio_example_2'];
     protected $fillable = [

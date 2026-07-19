@@ -16,7 +16,7 @@ class Test extends Model
     const CUSTOMER_PERSONAL = 2;
     const  CUSTOMER_ENTERPRISE = 3;
 
-    use \Dimsav\Translatable\Translatable;
+    use \Astrotomic\Translatable\Translatable;
 
     public $table = 'test';
 

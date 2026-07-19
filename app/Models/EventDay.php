@@ -10,7 +10,7 @@ class EventDay extends Model
     const GROUP = 2;
     const USER_SELECTED = 3;
 
-    use \Dimsav\Translatable\Translatable;
+    use \Astrotomic\Translatable\Translatable;
 
     protected $table = 'event_day';
 

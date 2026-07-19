@@ -8,7 +8,7 @@ class Conversation extends Model
 {
     const AUDIO = 1;
     const VIDEO = 2;
-    use \Dimsav\Translatable\Translatable;
+    use \Astrotomic\Translatable\Translatable;
     protected $table = 'conversation';
     public $timestamps = true;
     public $translatedAttributes = ['name', 'sub_title', 'sub_title_web'];

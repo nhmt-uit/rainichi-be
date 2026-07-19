@@ -8,7 +8,7 @@ class Notification extends Model
 {
     public $timestamps = true;
 
-    use \Dimsav\Translatable\Translatable;
+    use \Astrotomic\Translatable\Translatable;
 
     protected $table = 'notification';
 

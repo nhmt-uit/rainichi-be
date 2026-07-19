@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class CourseType extends Model
 {
-    use \Dimsav\Translatable\Translatable;
+    use \Astrotomic\Translatable\Translatable;
 
     //Declare category
     const COURSE = 1;

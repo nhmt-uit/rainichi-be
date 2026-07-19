@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Reading extends Model
 {
-    use \Dimsav\Translatable\Translatable;
+    use \Astrotomic\Translatable\Translatable;
     protected $table = 'reading';
     public $translatedAttributes = ['name', 'description'];
     protected $fillable = [

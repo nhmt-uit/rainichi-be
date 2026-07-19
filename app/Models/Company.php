@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Company extends Base
 {
-    use SoftDeletes, \Dimsav\Translatable\Translatable;
+    use SoftDeletes, \Astrotomic\Translatable\Translatable;
 
 
     protected $table = 'companies';
