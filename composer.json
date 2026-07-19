@@ -17,7 +17,7 @@
     "fideloper/proxy": "^4.0",
     "google/apiclient": "^2.0",
     "kylekatarnls/update-helper": "^1.2",
-    "laravel/framework": "5.7.*",
+    "laravel/framework": "5.8.*",
     "laravel/passport": "^7.0",
     "laravel/socialite": "^3.2",
     "laravel/tinker": "^1.0",
