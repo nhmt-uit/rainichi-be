@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateEventDayTable extends Migration
+class AddGroupIdForeignToEventDayTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,12 +13,8 @@ class CreateEventDayTable extends Migration
      */
     public function up()
     {
-        Schema::create('event_day', function (Blueprint $table) {
-            $table->increments('id');
-            $table->integer('credits');
-            $table->integer('group_id')->unsigned();
-            $table->integer('type');
-            $table->timestamps();
+        Schema::table('event_day', function (Blueprint $table) {
+            $table->foreign('group_id')->references('id')->on('group_user')->onDelete('cascade');
         });
     }
 
@@ -29,6 +25,8 @@ class CreateEventDayTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('event_day');
+        Schema::table('event_day', function (Blueprint $table) {
+            $table->dropForeign(['group_id']);
+        });
     }
 }
