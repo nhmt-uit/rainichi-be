@@ -12,7 +12,8 @@ use App\Models\MoneyToCredit;
 use Google_Client;
 use Google_Service_AndroidPublisher;
 use Illuminate\Support\Facades\Log;
-use phpseclib\Crypt\RSA;
+use phpseclib3\Crypt\PublicKeyLoader;
+use phpseclib3\Crypt\RSA;
 use Google_Service_AndroidPublisher_InAppProductListing;
 use Google_Service_AndroidPublisher_InAppProduct;
 use Google_Service_AndroidPublisher_Price;
@@ -53,16 +54,14 @@ class GoogleService
 
     public function verifySignature($message, $signature)
     {
-        $rsa = new RSA();
         $publicKey = $this::PUBLIC_KEY;
-        $rsa->setSignatureMode(RSA::SIGNATURE_PKCS1);
         $key = trim($publicKey);
         $key_raw = <<<EOD
 -----BEGIN PUBLIC KEY-----
 $key
 -----END PUBLIC KEY-----
 EOD;
-        $rsa->loadKey($key_raw);
+        $rsa = PublicKeyLoader::load($key_raw)->withPadding(RSA::SIGNATURE_PKCS1);
 
         return $rsa->verify(json_encode($message), base64_decode($signature));
     }
