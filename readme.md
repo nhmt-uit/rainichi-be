@@ -40,6 +40,8 @@ To link all file from storage local to public, run (if not using media server):
    - Create country default: php artisan db:seed --class=CountryTableSeeder
    - Create course currency default: php artisan db:seed --class=CoursePriceCurrencyTableSeeder
    - Update course price to personal: php artisan db:seed --class=CoursePriceTableSeeder
+   - Create level default (N1-N5, Basic): php artisan db:seed --class=LevelTableSeeder
+   - Create default user avatars (requires at least one user to already exist, used as `created_by`): php artisan db:seed --class=DefaultAvatarTableSeeder
     
 
 if you are using apache as a web service. run:

@@ -1,5 +1,7 @@
 <?php
 
+namespace Database\Seeders;
+
 
 use App\Models\LandingContent;
 use App\Models\LandingPage;

@@ -18,8 +18,8 @@ class AddColumnUserNameColumnUserApplyTable extends Migration
             $table->string('email')->nullable()->index();
             $table->longText('info')->nullable();
             $table->string('cv')->nullable();
-            $table->unique(['article_id','ip_address']);
             $table->string('ip_address')->nullable()->index();
+            $table->unique(['article_id','ip_address']);
             $table->string('user_agent')->nullable()->index();
             $table->softDeletes();
         });
@@ -32,11 +32,10 @@ class AddColumnUserNameColumnUserApplyTable extends Migration
      */
     public function down()
     {
-        Schema::table('user_apply', function (Blueprint $table) {
-            $sm = Schema::getConnection()->getDoctrineSchemaManager();
-            $indexesFound = $sm->listTableIndexes('user_apply');
-            if(array_key_exists("user_apply_article_id_ip_address_unique", $indexesFound))
-            {
+        $indexNames = collect(Schema::getIndexes('user_apply'))->pluck('name');
+
+        Schema::table('user_apply', function (Blueprint $table) use ($indexNames) {
+            if ($indexNames->contains('user_apply_article_id_ip_address_unique')) {
                 $table->dropUnique('user_apply_article_id_ip_address_unique');
             }
 

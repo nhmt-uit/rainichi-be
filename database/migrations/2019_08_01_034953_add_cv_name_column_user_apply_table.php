@@ -13,17 +13,16 @@ class AddCvNameColumnUserApplyTable extends Migration
      */
     public function up()
     {
-        Schema::table('user_apply', function (Blueprint $table) {
-            $sm = Schema::getConnection()->getDoctrineSchemaManager();
-            $indexesFound = $sm->listTableIndexes('user_apply');
+        $indexNames = collect(Schema::getIndexes('user_apply'))->pluck('name');
 
-            if (Schema::hasColumn('user_apply', 'user_id') && array_key_exists("user_apply_article_id_user_id_unique", $indexesFound)) {
+        Schema::table('user_apply', function (Blueprint $table) use ($indexNames) {
+            if (Schema::hasColumn('user_apply', 'user_id') && $indexNames->contains('user_apply_article_id_user_id_unique')) {
                 $table->dropForeign(['user_id']);
                 $table->dropUnique('user_apply_article_id_user_id_unique');
                 $table->foreign('user_id')->references('id')->on('users')->onDelete('cascade');
             }
 
-            if (Schema::hasColumn('user_apply', 'article_id') && array_key_exists("user_apply_article_id_ip_address_unique", $indexesFound)) {
+            if (Schema::hasColumn('user_apply', 'article_id') && $indexNames->contains('user_apply_article_id_ip_address_unique')) {
                 $table->dropForeign(['article_id']);
                 $table->dropUnique('user_apply_article_id_ip_address_unique');
                 $table->foreign('article_id')->references('id')->on('articles')->onDelete('cascade');
