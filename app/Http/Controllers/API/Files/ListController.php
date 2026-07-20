@@ -17,20 +17,20 @@ class ListController extends Controller
     public function index()
     {
         $files = [];
-        $s3 = S3Client::factory(array(
+        $s3 = new S3Client([
+            'version' => 'latest',
             'endpoint' => env('AWS_URL'),
-            'region' =>'',
-            'credentials' =>
-                [
-                    'key' => env('AWS_ACCESS_KEY_ID'),
-                    'secret' => env('AWS_SECRET_ACCESS_KEY'),
-                ]
-        ));
+            'region' => 'us-east-1',
+            'use_path_style_endpoint' => true,
+            'credentials' => [
+                'key' => env('AWS_ACCESS_KEY_ID'),
+                'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            ]
+        ]);
 
         $bucket = env('AWS_BUCKET');
         try {
             $objects = $s3->getIterator('ListObjects', array(
-                'PathStyle' => true,
                 "Bucket" => $bucket,
                 "Prefix" => 'finders/' //must have the trailing forward slash "/"
             ))->toArray();

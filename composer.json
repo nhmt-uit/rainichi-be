@@ -12,7 +12,7 @@
     "ext-curl": "*",
     "ext-json": "*",
     "astrotomic/laravel-translatable": "^11.9",
-    "aws/aws-sdk-php": "^2.8.31",
+    "aws/aws-sdk-php": "^3.300",
     "doctrine/dbal": "^3.6",
     "google/apiclient": "^2.0",
     "kylekatarnls/update-helper": "^1.2",

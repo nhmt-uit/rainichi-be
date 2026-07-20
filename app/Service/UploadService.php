@@ -55,20 +55,11 @@ class UploadService
      */
     public static function handleRemoveFile($file_link)
     {
-        $s3 = S3Client::factory(array(
-            'endpoint' => env('AWS_URL'),
-            'region' =>'',
-            'credentials' =>
-                [
-                    'key' => env('AWS_ACCESS_KEY_ID'),
-                    'secret' => env('AWS_SECRET_ACCESS_KEY'),
-                ]
-        ));
+        $s3 = self::makeS3Client();
         try {
             $s3->deleteObject(array(
                 'Bucket' => env('AWS_BUCKET'),
                 'Key' => $file_link,
-                'PathStyle' => true
             ));
             return [
                 'success' => true,
@@ -129,15 +120,7 @@ class UploadService
      */
     static function saveFileToS3($file, $path)
     {
-        $s3 = S3Client::factory(array(
-            'endpoint' => env('AWS_URL'),
-            'region' =>'',
-            'credentials' =>
-                [
-                    'key' => env('AWS_ACCESS_KEY_ID'),
-                    'secret' => env('AWS_SECRET_ACCESS_KEY'),
-                ]
-        ));
+        $s3 = self::makeS3Client();
         $filePath = $file;
         $filename = self::createFilename($file);
         $bucket = env('AWS_BUCKET');
@@ -146,7 +129,6 @@ class UploadService
             'Bucket' => $bucket,
             'Key' => $path . $filename,
             'ACL' => 'public-read',
-            'PathStyle' => true
         ));
         $uploadId = $result['UploadId'];
         try {
@@ -160,7 +142,6 @@ class UploadService
                     'UploadId' => $uploadId,
                     'PartNumber' => $partNumber,
                     'Body' => fread($file, 25 * 1024 * 1024),
-                    'PathStyle' => true
                 ));
                 $parts[] = array(
                     'PartNumber' => $partNumber++,
@@ -173,7 +154,6 @@ class UploadService
                 'Bucket' => $bucket,
                 'Key' => $path . $filename,
                 'UploadId' => $uploadId,
-                'PathStyle' => true
             ));
         }
         $s3->completeMultipartUpload(array(
@@ -181,7 +161,6 @@ class UploadService
             'Key' => $path . $filename,
             'UploadId' => $uploadId,
             'Parts' => $parts,
-            'PathStyle' => true
         ));
 
         return $path . $filename;
@@ -221,18 +200,8 @@ class UploadService
     static function createFolder($name)
     {
         $bucket = env('AWS_BUCKET');
-        $s3 = S3Client::factory(array(
-            'endpoint' => env('AWS_URL'),
-            'region' =>'',
-            'credentials' =>
-                [
-                    'key' => env('AWS_ACCESS_KEY_ID'),
-                    'secret' => env('AWS_SECRET_ACCESS_KEY'),
-                ]
-        ));
-        $response = $s3->doesObjectExist($bucket, $name, array(
-            'PathStyle' => true
-        ));
+        $s3 = self::makeS3Client();
+        $response = $s3->doesObjectExist($bucket, $name);
         if ($response) {
             return [
               'success' => false,
@@ -244,7 +213,6 @@ class UploadService
                 'Key' => $name . "/",
                 'Body' => '',
                 'ACL' => 'public-read-write',
-                'PathStyle' => true
             ));
             return [
                 'success' => true,
@@ -252,5 +220,23 @@ class UploadService
             ];
         }
 
+    }
+
+    /**
+     * Build an S3 client for the custom (non-AWS) S3-compatible endpoint this app uses.
+     * @return S3Client
+     */
+    private static function makeS3Client()
+    {
+        return new S3Client([
+            'version' => 'latest',
+            'endpoint' => env('AWS_URL'),
+            'region' => 'us-east-1',
+            'use_path_style_endpoint' => true,
+            'credentials' => [
+                'key' => env('AWS_ACCESS_KEY_ID'),
+                'secret' => env('AWS_SECRET_ACCESS_KEY'),
+            ]
+        ]);
     }
 }
