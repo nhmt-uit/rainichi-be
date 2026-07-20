@@ -9,6 +9,7 @@
 namespace App\Service;
 
 
+use Illuminate\Support\Str;
 use Aws\S3\Exception\S3Exception;
 use Aws\S3\S3Client;
 use Illuminate\Http\Request;
@@ -193,7 +194,7 @@ class UploadService
     {
         $extension = $file->getClientOriginalExtension();
         // Add timestamp hash to name of the file
-        $filename = "rainichi-" . md5(time()) . str_random(4) . "." . $extension;
+        $filename = "rainichi-" . md5(time()) . Str::random(4) . "." . $extension;
         return $filename;
     }
 

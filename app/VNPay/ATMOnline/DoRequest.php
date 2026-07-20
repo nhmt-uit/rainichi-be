@@ -3,6 +3,7 @@
 
 namespace App\VNPay\ATMOnline;
 
+use Illuminate\Support\Str;
 use App\VNPay\SaveOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -22,7 +23,7 @@ class DoRequest
         $vnp_HashSecret = config('vn_pay.normal.secret_key'); //Secret key
         $vnp_Url = config('vn_pay.normal.url');
         $vnp_Returnurl = $paymentByCash ? config('vn_pay.normal.return_cash_url') : config('vn_pay.normal.return_url');
-        $vnp_TxnRef = 'bstar' . md5(time() . str_random(5) . str_random(5) . 'rainichi'); //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
+        $vnp_TxnRef = 'bstar' . md5(time() . Str::random(5) . Str::random(5) . 'rainichi'); //Mã đơn hàng. Trong thực tế Merchant cần insert đơn hàng vào DB và gửi mã này sang VNPAY
         $vnp_OrderInfo = $paymentByCash ? 'OrderByCash' : 'OrderPayment';
         $vnp_OrderType = 'billpayment';
         $vnp_BankCode = '';

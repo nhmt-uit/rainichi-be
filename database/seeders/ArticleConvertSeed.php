@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use App\Models\ArticleTranslations;
 
@@ -18,7 +19,7 @@ class ArticleConvertSeed extends Seeder
         $allArticles = ArticleTranslations::query()->get()->all();
         foreach ($allArticles as $key => $article)
         {
-            $article->slug = str_slug($article->name, '-');
+            $article->slug = Str::slug($article->name, '-');
             $article->save();
         }
     }

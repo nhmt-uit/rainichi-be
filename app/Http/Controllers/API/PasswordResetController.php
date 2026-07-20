@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Service\BaseResponse;
 use Illuminate\Http\Request;
@@ -36,7 +37,7 @@ class PasswordResetController extends Controller
             ['email' => $user->email],
             [
                 'email' => $user->email,
-                'token' => str_random(60)
+                'token' => Str::random(60)
             ]
         );
         if ($user && $passwordReset)

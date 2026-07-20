@@ -3,6 +3,7 @@
 
 namespace App\Http\Controllers\API\Article;
 
+use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\ArticleRequest;
 use App\Models\Article;
@@ -47,9 +48,9 @@ class CreateController extends  Controller {
             $article->translateOrNew($language)->work_at = $article_data['translations'][$language]['work_at'] ?? '';
             $article->translateOrNew($language)->offer = $article_data['translations'][$language]['offer'] ?? '';
             if (key_exists('slug', $article_data['translations'][$language])) {
-                $article->translateOrNew($language)->slug = str_slug($article_data['translations'][$language]['slug'], '-');
+                $article->translateOrNew($language)->slug = Str::slug($article_data['translations'][$language]['slug'], '-');
             } else {
-                $article->translateOrNew($language)->slug = str_slug($article_data['translations'][$language]['name'], '-');
+                $article->translateOrNew($language)->slug = Str::slug($article_data['translations'][$language]['name'], '-');
 
             }
         }

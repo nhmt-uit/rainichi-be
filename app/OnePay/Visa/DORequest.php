@@ -8,6 +8,7 @@
 
 namespace App\OnePay\Visa;
 
+use Illuminate\Support\Str;
 use App\OnePay\SaveOrder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -21,7 +22,7 @@ class DORequest
      */
     public static function sendDORequest(Request $request)
     {
-        $payment_transaction_id = md5(time() . str_random(5) . str_random(5) . 'rainichi');
+        $payment_transaction_id = md5(time() . Str::random(5) . Str::random(5) . 'rainichi');
         $SECURE_SECRET = config('one_pay.international.secret_key');
         $vpcURL = "";
         $payment_data = $request->except('payment_type');

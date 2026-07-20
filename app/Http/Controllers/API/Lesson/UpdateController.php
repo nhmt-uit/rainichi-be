@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\API\Lesson;
 
 
+use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Models\CourseLesson;
 use App\Models\Lesson;
@@ -68,7 +69,7 @@ class UpdateController extends Controller
                 $language_keys = array_keys($lesson_data['translations']);
                 foreach ($language_keys as $language) {
                     $lesson->translateOrNew($language)->name = $lesson_data['translations'][$language]['name'];
-                    $lesson->translateOrNew($language)->slug = str_slug($lesson_data['translations'][$language]['name']);
+                    $lesson->translateOrNew($language)->slug = Str::slug($lesson_data['translations'][$language]['name']);
                     $lesson->translateOrNew($language)->description = $lesson_data['translations'][$language]['description'];
                 }
             }

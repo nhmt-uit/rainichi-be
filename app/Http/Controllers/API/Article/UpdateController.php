@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Article;
 
+use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Models\Article;
 use App\Service\BaseResponse;
@@ -60,9 +61,9 @@ class UpdateController extends Controller
                         $article->translateOrNew($language)->work_at = $data_change['translations'][$language]['work_at'];
                         $article->translateOrNew($language)->offer = $data_change['translations'][$language]['offer'];
                         if (key_exists('slug', $data_change['translations'][$language])) {
-                            $article->translateOrNew($language)->slug = str_slug($data_change['translations'][$language]['slug'], '-');
+                            $article->translateOrNew($language)->slug = Str::slug($data_change['translations'][$language]['slug'], '-');
                         } else {
-                            $article->translateOrNew($language)->slug = str_slug($data_change['translations'][$language]['name'], '-');
+                            $article->translateOrNew($language)->slug = Str::slug($data_change['translations'][$language]['name'], '-');
 
                         }
                     }

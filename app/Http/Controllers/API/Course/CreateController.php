@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\API\Course;
 
 
+use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CourseRequest;
 use App\Models\Course;
@@ -55,7 +56,7 @@ class CreateController extends Controller
         $language_keys = array_keys($course_data['translations']);
         foreach ($language_keys as $language) {
             $course->translateOrNew($language)->name = $course_data['translations'][$language]['name'];
-            $course->translateOrNew($language)->slug = str_slug($course_data['translations'][$language]['name']);
+            $course->translateOrNew($language)->slug = Str::slug($course_data['translations'][$language]['name']);
             $course->translateOrNew($language)->description = $course_data['translations'][$language]['description'];
             $course->translateOrNew($language)->landing_description = $course_data['translations'][$language]['landing_description'] ?? null;
             $course->translateOrNew($language)->landing_gift = $course_data['translations'][$language]['landing_gift'] ?? null;

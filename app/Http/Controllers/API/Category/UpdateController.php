@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Category;
 
+use Illuminate\Support\Str;
 use App\Models\Category;
 use App\Service\BaseResponse;
 use App\Transformers\ArticleAdminTransformer;
@@ -44,7 +45,7 @@ class UpdateController extends Controller
                         $category->translateOrNew($language)->name = $data_change['translations'][$language]['name'];
                         $category->translateOrNew($language)->short_content = $data_change['translations'][$language]['short_content'];
                         if(key_exists('slug', $data_change['translations'][$language])) {
-                            $category->translateOrNew($language)->slug = str_slug($data_change['translations'][$language]['slug']);
+                            $category->translateOrNew($language)->slug = Str::slug($data_change['translations'][$language]['slug']);
                         }
                     }
                 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API\Category;
 
+use Illuminate\Support\Str;
 use App\Models\Category;
 use App\Service\BaseResponse;
 use Illuminate\Http\Request;
@@ -20,9 +21,9 @@ class CreateController extends Controller
             $category->translateOrNew($language)->name = $category_data['translations'][$language]['name'];
             $category->translateOrNew($language)->short_content = $category_data['translations'][$language]['short_content'];
             if(key_exists('slug', $category_data['translations'][$language])) {
-                $category->translateOrNew($language)->slug = str_slug($category_data['translations'][$language]['slug'], '-');
+                $category->translateOrNew($language)->slug = Str::slug($category_data['translations'][$language]['slug'], '-');
             }else {
-                $category->translateOrNew($language)->slug = str_slug($category_data['translations'][$language]['name'], '-');
+                $category->translateOrNew($language)->slug = Str::slug($category_data['translations'][$language]['name'], '-');
             }
         }
 

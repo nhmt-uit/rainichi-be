@@ -9,6 +9,7 @@
 namespace App\Http\Controllers\API\Lesson;
 
 
+use Illuminate\Support\Str;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\LessonRequest;
 use App\Models\CourseLesson;
@@ -42,7 +43,7 @@ class CreateController extends Controller
         $language_keys = array_keys($lesson_data['translations']);
         foreach ($language_keys as $language) {
             $lesson->translateOrNew($language)->name = $lesson_data['translations'][$language]['name'];
-            $lesson->translateOrNew($language)->slug = str_slug($lesson_data['translations'][$language]['name']);
+            $lesson->translateOrNew($language)->slug = Str::slug($lesson_data['translations'][$language]['name']);
             $lesson->translateOrNew($language)->description = $lesson_data['translations'][$language]['description'];
         }
         if (array_key_exists('chapters', $lesson_data) && $lesson_data['chapters']) {

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Seeder;
 use App\Models\CategoryTranslations;
 class CategoryConvertSeed extends Seeder
@@ -17,7 +18,7 @@ class CategoryConvertSeed extends Seeder
         $translators = CategoryTranslations::query()->get()->all();
         foreach ($translators as $key  => $cat)
         {
-            $cat->slug = str_slug($cat->name, '-');
+            $cat->slug = Str::slug($cat->name, '-');
             $cat->save();
         }
     }
