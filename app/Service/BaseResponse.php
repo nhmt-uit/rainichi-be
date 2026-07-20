@@ -22,7 +22,7 @@ class BaseResponse
      * @param array $meta
      * @return \Illuminate\Http\JsonResponse
      */
-    public static function customResponse($message, $data, $success, $code = null, $http_status, $http_message, $meta = [])
+    public static function customResponse($message, $data, $success, $code, $http_status, $http_message, $meta = [])
     {
         return response()->json([
             'success' => $success,
