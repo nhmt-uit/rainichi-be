@@ -74,9 +74,10 @@ class RewardRules
     {
         // If users login continuously within 7 days will be rewarded.
         $reward = $this->findRewardRule($this->key);
-        if ($reward) {
-            $this->user->credits += $reward->credit;
+        if (!$reward) {
+            return;
         }
+        $this->user->credits += $reward->credit;
         if ($this->user->save()) {
             RewardLog::query()->create([
                 'user_id' => $this->user->id,
