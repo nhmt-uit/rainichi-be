@@ -110,21 +110,17 @@ class AuthController extends Controller
                 'Unauthorized'
             );
         $user = $request->user();
-        $http = new \GuzzleHttp\Client;
-        $response = $http->post(env('APP_URL') . 'oauth/token', [
-            'form_params' => [
-                'grant_type' => env('GRANT_TYPE'),
-                'client_id' => env('CLIENT_ID'),
-                'client_secret' => env('CLIENT_PASSWORD'),
-                'username' => $request->email,
-                'password' => $request->password,
-                'scope' => '',
-            ],
+        $res = $this->requestOauthToken([
+            'grant_type' => env('GRANT_TYPE'),
+            'client_id' => env('CLIENT_ID'),
+            'client_secret' => env('CLIENT_PASSWORD'),
+            'username' => $request->email,
+            'password' => $request->password,
+            'scope' => '',
         ]);
 
         $rewardRule = new RewardRules($user);
         $rewardRule->whenLogin();
-        $res = json_decode((string)$response->getBody(), true);
         $user->avatar = media_url_web($user->avatar);
 
         // COPY FROM ADMIN LOGIN
@@ -219,19 +215,18 @@ class AuthController extends Controller
     public function refresh(Request $request)
     {
         try {
+            $res = $this->requestOauthToken([
+                'grant_type' => 'refresh_token',
+                'refresh_token' => $request->input('refresh_token'),
+                'client_id' => env('CLIENT_ID'),
+                'client_secret' => env('CLIENT_PASSWORD'),
+                'scope' => '',
+            ], $statusCode);
 
-            $http = new \GuzzleHttp\Client;
-            $response = $http->post(env('APP_URL') . 'oauth/token', [
-                'form_params' => [
-                    'grant_type' => 'refresh_token',
-                    'refresh_token' => $request->input('refresh_token'),
-                    'client_id' => env('CLIENT_ID'),
-                    'client_secret' => env('CLIENT_PASSWORD'),
-                    'scope' => '',
-                ],
-            ]);
+            if ($statusCode !== 200) {
+                throw new \Exception($res['error_description'] ?? $res['message'] ?? 'invalid_grant');
+            }
 
-            $res = json_decode((string)$response->getBody(), true);
             return BaseResponse::customResponse(
                 'Refresh successfully',
                 [
@@ -460,5 +455,26 @@ class AuthController extends Controller
             $user->update(['active' => true, 'activation_token' => time(), 'email_verified_at' => Carbon::now()]);
         }
         return view('users.active', compact('status', 'message', 'return_link'));
+    }
+
+    /**
+     * Exchange OAuth grant params for a token by dispatching to this app's
+     * own /oauth/token route in-process, instead of a real outbound HTTP
+     * call to itself. Avoids depending on an external network round-trip
+     * for something the app can resolve internally, and sidesteps
+     * single-threaded dev servers deadlocking on a request that calls back
+     * into itself.
+     *
+     * @param array $params
+     * @param int|null $statusCode filled with the response's HTTP status code
+     * @return array decoded JSON body
+     */
+    private function requestOauthToken(array $params, &$statusCode = null)
+    {
+        $tokenRequest = \Illuminate\Http\Request::create('/oauth/token', 'POST', $params);
+        $response = app()->handle($tokenRequest);
+        $statusCode = $response->getStatusCode();
+
+        return json_decode($response->getContent(), true);
     }
 }

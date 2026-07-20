@@ -9,11 +9,41 @@ use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Foundation\Testing\DatabaseTransactions;
 use Illuminate\Support\Facades\Mail;
+use Laravel\Passport\ClientRepository;
 use Tests\TestCase;
 
 class AuthTest extends TestCase
 {
     use DatabaseTransactions;
+
+    private $envBackup = [];
+
+    protected function tearDown(): void
+    {
+        foreach ($this->envBackup as $key => $value) {
+            $value === null ? putenv($key) : putenv("$key=$value");
+        }
+        parent::tearDown();
+    }
+
+    /**
+     * Create a real password-grant Passport client and point the app's
+     * CLIENT_ID/CLIENT_PASSWORD/GRANT_TYPE env vars at it for this test,
+     * since AuthController reads those directly via env().
+     */
+    protected function usePasswordGrantClient()
+    {
+        $client = app(ClientRepository::class)->createPasswordGrantClient(
+            null, 'Test Password Grant Client', 'http://localhost'
+        );
+
+        foreach (['CLIENT_ID', 'CLIENT_PASSWORD', 'GRANT_TYPE'] as $key) {
+            $this->envBackup[$key] = getenv($key);
+        }
+        putenv('CLIENT_ID=' . $client->id);
+        putenv('CLIENT_PASSWORD=' . $client->secret);
+        putenv('GRANT_TYPE=password');
+    }
 
     protected function seedActivationPrerequisites()
     {
@@ -115,6 +145,27 @@ class AuthTest extends TestCase
         ]);
 
         $response->assertStatus(404);
+    }
+
+    public function test_login_succeeds_and_returns_access_and_refresh_tokens()
+    {
+        $this->usePasswordGrantClient();
+        $user = factory(User::class)->create([
+            'email' => 'login-success@example.com',
+            'active' => true,
+            'password' => bcrypt('correct-password'),
+        ]);
+
+        $response = $this->postJson('/api/auth/login', [
+            'email' => 'login-success@example.com',
+            'password' => 'correct-password',
+        ]);
+
+        $response->assertStatus(200);
+        $response->assertJsonStructure([
+            'data' => ['access_token', 'refresh_token', 'token_type', 'profile'],
+        ]);
+        $this->assertEquals($user->id, $response->json('data.profile.id'));
     }
 
     public function test_login_rejects_wrong_password()
