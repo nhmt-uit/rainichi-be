@@ -16,7 +16,7 @@ class RewardRulesTest extends TestCase
 
     public function test_add_does_nothing_when_no_matching_reward_rule_exists()
     {
-        $user = factory(User::class)->create(['credits' => 0]);
+        $user = User::factory()->create(['credits' => 0]);
 
         (new RewardRules($user, 'no_such_key'))->add();
 
@@ -27,7 +27,7 @@ class RewardRulesTest extends TestCase
     public function test_add_credits_user_and_logs_when_reward_rule_matches()
     {
         Queue::fake();
-        $user = factory(User::class)->create(['credits' => 0]);
+        $user = User::factory()->create(['credits' => 0]);
         RewardRule::query()->create([
             'description' => 'Test reward',
             'credit' => 15,

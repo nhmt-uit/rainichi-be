@@ -48,7 +48,7 @@ class AuthTest extends TestCase
     protected function seedActivationPrerequisites()
     {
         Level::query()->forceCreate(['is_foundation' => 1]);
-        $creator = factory(User::class)->create();
+        $creator = User::factory()->create();
         DefaultAvatar::query()->forceCreate([
             'avatar' => 'users/default-avatars/default.png',
             'created_by' => $creator->id,
@@ -85,7 +85,7 @@ class AuthTest extends TestCase
 
     public function test_sign_up_rejects_already_active_email()
     {
-        $user = factory(User::class)->create([
+        $user = User::factory()->create([
             'email' => 'taken@example.com',
             'active' => true,
         ]);
@@ -103,7 +103,7 @@ class AuthTest extends TestCase
         $this->seedSignUpRewardRule();
         Mail::fake();
 
-        $user = factory(User::class)->create([
+        $user = User::factory()->create([
             'email' => 'activate-me@example.com',
             'active' => false,
             'password' => null,
@@ -131,7 +131,7 @@ class AuthTest extends TestCase
 
     public function test_signup_activate_rejects_invalid_token()
     {
-        $user = factory(User::class)->create([
+        $user = User::factory()->create([
             'email' => 'wrong-token@example.com',
             'active' => false,
         ]);
@@ -150,7 +150,7 @@ class AuthTest extends TestCase
     public function test_login_succeeds_and_returns_access_and_refresh_tokens()
     {
         $this->usePasswordGrantClient();
-        $user = factory(User::class)->create([
+        $user = User::factory()->create([
             'email' => 'login-success@example.com',
             'active' => true,
             'password' => bcrypt('correct-password'),
@@ -170,7 +170,7 @@ class AuthTest extends TestCase
 
     public function test_login_rejects_wrong_password()
     {
-        factory(User::class)->create([
+        User::factory()->create([
             'email' => 'login-user@example.com',
             'active' => true,
             'password' => bcrypt('correct-password'),
@@ -186,7 +186,7 @@ class AuthTest extends TestCase
 
     public function test_login_rejects_inactive_user()
     {
-        factory(User::class)->create([
+        User::factory()->create([
             'email' => 'inactive-user@example.com',
             'active' => false,
             'password' => bcrypt('correct-password'),
@@ -202,7 +202,7 @@ class AuthTest extends TestCase
 
     public function test_verify_email_exists()
     {
-        $user = factory(User::class)->create(['email' => 'exists@example.com']);
+        $user = User::factory()->create(['email' => 'exists@example.com']);
 
         $response = $this->postJson('/api/auth/signup/verify-email', ['email' => $user->email]);
         $response->assertJson(['exists' => true]);
