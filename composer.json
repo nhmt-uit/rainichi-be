@@ -22,7 +22,8 @@
     "laravel/tinker": "^2.0",
     "league/fractal": "^0.17.0",
     "phpseclib/phpseclib": "^3.0",
-    "pion/laravel-chunk-upload": "^1.2"
+    "pion/laravel-chunk-upload": "^1.2",
+    "predis/predis": "^3.5"
   },
   "require-dev": {
     "filp/whoops": "^2.0",
