@@ -14,10 +14,14 @@
 /**
  * Authentication Resources
  */
-Route::get('/finder', 'API\Files\ListController@index');
-Route::get('/push', 'API\DemoController@create');
-Route::post('/finder-upload', 'API\Files\UploadController@uploadViaFinder');
-Route::post('/finder-create-folder', 'API\Files\UploadController@createFolder');
+Route::group([
+    'middleware' => 'auth:api',
+], function () {
+    Route::get('/finder', 'API\Files\ListController@index');
+    Route::get('/push', 'API\DemoController@create');
+    Route::post('/finder-upload', 'API\Files\UploadController@uploadViaFinder');
+    Route::post('/finder-create-folder', 'API\Files\UploadController@createFolder');
+});
 Route::post('/finder-delete', 'API\Files\UploadController@removeViaFinder');
 
 Route::group([
@@ -542,7 +546,7 @@ Route::group([
     });
 Route::group([
     'prefix' => 'upload',
-//    'middleware' => 'auth:api',
+    'middleware' => 'auth:api',
     'namespace' => 'API\Files'
 ],
     function () {
@@ -914,7 +918,6 @@ Route::group([
     'middleware' => 'auth:api',
 ], function () {
     Route::get('/', 'API\UserTokenDevice\UserTokenDeviceController@index');
-    Route::get('/admin', 'API\UserTokenDevice\UserTokenDeviceController@getListAdmin');
     Route::post('/delete', 'API\UserTokenDevice\UserTokenDeviceController@delete');
     Route::get('/{id}', 'API\UserTokenDevice\UserTokenDeviceController@detail');
     Route::post('/detail-by-token-device', 'API\UserTokenDevice\UserTokenDeviceController@detail_by_token_device');

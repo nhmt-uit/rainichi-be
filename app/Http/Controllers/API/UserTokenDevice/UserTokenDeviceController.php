@@ -37,7 +37,7 @@ class UserTokenDeviceController extends Controller
      */
     public function index()
     {
-        $data = UserTokenDevice::query()->get();        
+        $data = UserTokenDevice::query()->where('user_id', Auth::id())->get();
         $data = new Collection($data, $this->userTokenDeviceTransformer);        
         $data = $this->fractal->createData($data);
         return BaseResponse::customResponse(

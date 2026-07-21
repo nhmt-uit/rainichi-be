@@ -30,10 +30,10 @@ class ListController extends Controller
 
         $bucket = env('AWS_BUCKET');
         try {
-            $objects = $s3->getIterator('ListObjects', array(
+            $objects = iterator_to_array($s3->getIterator('ListObjects', array(
                 "Bucket" => $bucket,
                 "Prefix" => 'finders/' //must have the trailing forward slash "/"
-            ))->toArray();
+            )), false);
             usort($objects, function ($t1, $t2) {
                 return strtotime($t2['LastModified']) - strtotime($t1['LastModified']);
             });

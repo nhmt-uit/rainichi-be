@@ -2,6 +2,7 @@
 
 namespace App\Exceptions;
 
+use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Throwable;
 
@@ -48,5 +49,22 @@ class Handler extends ExceptionHandler
     public function render($request, Throwable $exception)
     {
         return parent::render($request, $exception);
+    }
+
+    /**
+     * This app has no web 'login' route -- every route that uses auth
+     * middleware is an `auth:api` route. The base handler's default falls
+     * back to `redirect()->guest(route('login'))` for requests that don't
+     * look like they expect JSON, which crashes with a 500 here since
+     * 'login' doesn't exist. Always respond with a plain 401 JSON error
+     * instead.
+     *
+     * @param \Illuminate\Http\Request $request
+     * @param \Illuminate\Auth\AuthenticationException $exception
+     * @return \Illuminate\Http\JsonResponse
+     */
+    protected function unauthenticated($request, AuthenticationException $exception)
+    {
+        return response()->json(['message' => $exception->getMessage()], 401);
     }
 }
