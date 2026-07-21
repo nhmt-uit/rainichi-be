@@ -70,10 +70,15 @@ class  ListController extends Controller
 
     public function getCategory()
     {
-        $typeList = Article::getArticleType();
+        // Article::getArticleType() has never existed on the model (no
+        // constants, no scope), so this always 500'd. No known caller uses
+        // this route -- the mobile app filters articles by category via
+        // GET /api/category/articles instead. Returning an empty list
+        // instead of guessing at "article type" values that might be
+        // expected by an admin CMS this repo doesn't contain.
         return BaseResponse::customResponse(
             'Get list successfully',
-            $typeList,
+            [],
             true,
             200,
             200,
